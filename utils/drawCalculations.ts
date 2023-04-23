@@ -1,13 +1,6 @@
-import {
-  ConnectorShape,
-  Frame,
-  SnapToValues,
-  StickyNote,
-  StickyNoteColor,
-  StrokeCapShape,
-  StrokeStyle,
-} from '@mirohq/websdk-types';
+import { Frame, StickyNote } from '@mirohq/websdk-types';
 import { FrameData, LocationPoints } from '../types';
+import { createConnector, createFrame, createStickyNote } from './drawFunctions';
 
 // Helper functions
 function findNextAvailableLocation(locationsMap: FrameData[]): LocationPoints {
@@ -22,63 +15,15 @@ function findNextAvailableLocation(locationsMap: FrameData[]): LocationPoints {
   };
 }
 
-async function createFrame(text: string, location: LocationPoints, width: number, height: number) {
-  // Create and return the frame object with the given location, width, and height
-  const frame = {
-    title: text,
-    width,
-    height,
-    style: {
-      fillColor: '#ffffff',
-    },
-    ...location,
-  };
-
-  return await miro.board.createFrame(frame);
-}
-
-async function createStickyNote(location: LocationPoints, size: number, content: string) {
-  // Create and return the sticky note object with the given location, size, and content
-  const node = {
-    ...location,
-    content,
-    width: size,
-    style: {
-      fillColor: StickyNoteColor.Yellow,
-    },
-  };
-  return await miro.board.createStickyNote(node);
-}
-
-async function createConnector(from: StickyNote, to: StickyNote, isLeft: boolean) {
-  // Create and return the connector object between the given from and to elements
-  const connector = {
-    shape: 'elbowed' as ConnectorShape,
-    style: {
-      endStrokeCap: 'rounded_stealth' as StrokeCapShape,
-      strokeStyle: 'dashed' as StrokeStyle,
-      strokeColor: 'rgba(0,0,0,0.76)',
-      strokeWidth: 2,
-    },
-    start: {
-      item: from.id,
-      position: {
-        x: isLeft ? 0.0 : 1.0,
-        y: 0.5,
-      },
-    },
-    end: {
-      item: to.id,
-      snapTo: isLeft ? 'right' : ('left' as SnapToValues),
-    },
-  };
-  return await miro.board.createConnector(connector);
+export async function expandMindMap(text: string, locationsMap: FrameData[]) {
+  console.log('expand text', text);
+  return locationsMap;
 }
 
 export async function createMindMap(text: string, locationsMap: FrameData[]) {
   const frameLocation = findNextAvailableLocation(locationsMap);
-  const frameWidth = 4000;
-  const frameHeight = 2000;
+  const frameWidth = 3000;
+  const frameHeight = 1500;
 
   const frame = await createFrame(text, frameLocation, frameWidth, frameHeight);
 
@@ -86,7 +31,7 @@ export async function createMindMap(text: string, locationsMap: FrameData[]) {
     x: frameLocation.x,
     y: frameLocation.y,
   };
-  const rootNode = await createStickyNote(rootNodeLocation, 200, text);
+  const rootNode = await createStickyNote(rootNodeLocation, 200, text, true);
   await updateViewport(frame);
   await frame.add(rootNode);
 
@@ -104,7 +49,7 @@ export async function createMindMap(text: string, locationsMap: FrameData[]) {
       x: rootNodeLocation.x + xOffset,
       y: rootNodeLocation.y + yOffset,
     };
-    const childNode = await createStickyNote(childNodeLocation, childNodeSize, (i + 1).toString());
+    const childNode = await createStickyNote(childNodeLocation, childNodeSize, (i + 1).toString(), false);
     await frame.add(childNode);
 
     const connector = await createConnector(rootNode, childNode, isLeft);

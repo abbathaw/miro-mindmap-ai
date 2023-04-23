@@ -4,12 +4,20 @@ import Image from 'next/image';
 import congratulations from '../public/congratulations.png';
 import { ISideBarSubmitProps } from '../types';
 
-const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit }) => {
+const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit, onExpand, selectedTarget }) => {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
     if (text) {
       onSubmit({ text });
+      setText('');
+    }
+  };
+
+  const handleExpand = () => {
+    if (text) {
+      onExpand({ text });
+      setText('');
     }
   };
 
@@ -31,11 +39,18 @@ const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit }) => {
           />
         </div>
       </form>
-      <div className="cs1 ce12">
+      <div className="cs1 ce6">
         <button className="button button-primary" type="button" disabled={!text} onClick={handleSubmit}>
           Create mind map
         </button>
       </div>
+      {selectedTarget && (
+        <div className="cs8 ce12">
+          <button className="button button-primary" type="button" disabled={!text} onClick={handleExpand}>
+            Expand
+          </button>
+        </div>
+      )}
     </div>
   );
 };
