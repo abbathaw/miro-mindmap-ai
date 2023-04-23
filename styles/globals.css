@@ -10,7 +10,18 @@ img {
   height: auto;
 }
 
-a.button {
-  text-decoration: none;
-  line-height: 48px;
+/*a.button {*/
+/*  text-decoration: none;*/
+/*  line-height: 48px;*/
+/*}*/
+
+.form-sidebar {
+  margin: 10px;
+}
+.form-sidebar--main-content {
+  align-self: flex-start
+}
+
+.input-text {
+  width: 90%;
 }

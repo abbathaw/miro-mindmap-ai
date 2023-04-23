@@ -8,7 +8,7 @@ export default function Document() {
           rel="stylesheet"
           href="https://unpkg.com/mirotone/dist/styles.css"
         ></link>
-        <script src="https://miro.com/app/static/sdk/v2/miro.js" />
+        <script src="https://miro.com/app/static/sdk/v2/miro.js" async />
       </Head>
       <body>
         <Main />
