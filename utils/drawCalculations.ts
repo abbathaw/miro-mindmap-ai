@@ -17,10 +17,11 @@ function findNextAvailableLocation(locationsMap: FrameData[]): LocationPoints {
 
 export async function expandMindMap(text: string, locationsMap: FrameData[]) {
   console.log('expand text', text);
+  // TODO implement this feature where we can expand on a child node and show more results
   return locationsMap;
 }
 
-export async function createMindMap(text: string, locationsMap: FrameData[]) {
+export async function createMindMap(text: string, results: string[], locationsMap: FrameData[]) {
   const frameLocation = findNextAvailableLocation(locationsMap);
   const frameWidth = 3000;
   const frameHeight = 1500;
@@ -38,18 +39,21 @@ export async function createMindMap(text: string, locationsMap: FrameData[]) {
   const childNodeSize = 200;
   const childNodesDistance = 300;
   const verticalSpacing = 100;
+  const totalChildNodes = results.length;
+  const nodesPerColumn = Math.ceil(totalChildNodes / 2);
 
-  for (let i = 0; i < 8; i++) {
-    const isLeft = i < 4; // First 4 nodes are on the left, the other 4 on the right
-    const columnIndex = isLeft ? i : i - 4; // Reset index for the right column
+  for (let i = 0; i < totalChildNodes; i++) {
+    const isLeft = i < nodesPerColumn; // First half are on the left, the other half on the right
+    const columnIndex = isLeft ? i : i - nodesPerColumn; // Reset index for the right column
     const xOffset = (isLeft ? -1 : 1) * childNodesDistance;
-    const yOffset = columnIndex * (childNodeSize + verticalSpacing) - (childNodeSize + verticalSpacing) * 1.5;
+    const yOffset =
+      columnIndex * (childNodeSize + verticalSpacing) - ((childNodeSize + verticalSpacing) * (nodesPerColumn - 1)) / 2;
 
     const childNodeLocation: LocationPoints = {
       x: rootNodeLocation.x + xOffset,
       y: rootNodeLocation.y + yOffset,
     };
-    const childNode = await createStickyNote(childNodeLocation, childNodeSize, (i + 1).toString(), false);
+    const childNode = await createStickyNote(childNodeLocation, childNodeSize, results[i], false);
     await frame.add(childNode);
 
     const connector = await createConnector(rootNode, childNode, isLeft);

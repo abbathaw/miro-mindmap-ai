@@ -4,7 +4,7 @@ import Image from 'next/image';
 import congratulations from '../public/congratulations.png';
 import { ISideBarSubmitProps } from '../types';
 
-const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit, onExpand, selectedTarget }) => {
+const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit, onExpand, selectedTarget, isLoading }) => {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
@@ -49,6 +49,11 @@ const Sidebar: React.FC<ISideBarSubmitProps> = ({ onSubmit, onExpand, selectedTa
           <button className="button button-primary" type="button" disabled={!text} onClick={handleExpand}>
             Expand
           </button>
+        </div>
+      )}
+      {isLoading && (
+        <div className="cs1 ce12">
+          <span className="label label-info">Thinking...</span>
         </div>
       )}
     </div>
