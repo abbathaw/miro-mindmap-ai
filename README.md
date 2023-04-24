@@ -1,3 +1,29 @@
+## Miro Mind Map AI
+
+Just a simple Miro plugin to create a Mind map in Miro using ChatGPT
+
+Implemented on a Sunday afternoon. Only one layer of mind map nodes created. Lost more of work to be done to have this ready :)
+
+Current features:
+- Insert a question/prompt and click button.
+- Uses openAI API to create chat completion.
+- Inserts a new frame and adds the sticky notes
+
+![screenshot](./sample.png)
+
+Missing features:
+- Expand on a sticky note and ask more data
+- Avoid drawing frame and sticky notes on existing board items
+- many more.. when I have extra Sundays free, however, this was for fun. Check out Miro AI beta which actually implement something like this but cooler.
+
+To run on your side locally
+
+- npm install
+- Add .env file using the same keys in sample.env
+- Install the miro app on your dev board in Miro
+
+
+
 ## Create a Miro app
 
 ### How to start locally
